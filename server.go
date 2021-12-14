@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 // Server http server
@@ -19,13 +18,6 @@ type Server struct {
 // NewServer
 func NewServer(addr string) *Server {
 	mux := chi.NewRouter()
-
-	mux.Use(
-		middleware.Compress(5, "gzip"),
-		middleware.Timeout(30*time.Second),
-		middleware.RealIP,
-		middleware.StripSlashes,
-	)
 
 	return &Server{
 		mux: mux,

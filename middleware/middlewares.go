@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -79,4 +80,24 @@ func CORS(origins []string) func(next http.Handler) http.Handler {
 // SetHeader
 func SetHeader(key, value string) func(next http.Handler) http.Handler {
 	return middleware.SetHeader(key, value)
+}
+
+// Gzip
+func Gzip(level int) func(next http.Handler) http.Handler {
+	return middleware.Compress(level, "gzip")
+}
+
+// Timeout
+func Timeout(dur time.Duration) func(next http.Handler) http.Handler {
+	return middleware.Timeout(dur)
+}
+
+// RealIP
+func RealIP(h http.Handler) http.Handler {
+	return middleware.RealIP(h)
+}
+
+// StripSlashes
+func StripSlashes(h http.Handler) http.Handler {
+	return middleware.StripSlashes(h)
 }
