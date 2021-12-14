@@ -101,3 +101,8 @@ func RealIP(h http.Handler) http.Handler {
 func StripSlashes(h http.Handler) http.Handler {
 	return middleware.StripSlashes(h)
 }
+
+// Logger
+func Logger(h http.Handler) http.Handler {
+	return middleware.Logger(h)
+}
