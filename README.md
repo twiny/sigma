@@ -8,10 +8,12 @@ a small wrapper around [go-chi](https://github.com/go-chi/chi) HTTP router.
 ## API
 Router methods.
 ```go
+// Router
 type Router interface {
 	Endpoint(method, pattern string, handler http.HandlerFunc)
 	Use(middlewares ...func(next http.Handler) http.Handler)
 	Group(pattern string, fn func(r Router))
+	Static(pattern, path string)
 	NotFound(handler http.HandlerFunc)
 	NotAllowed(handler http.HandlerFunc)
 	ServeHTTP(w http.ResponseWriter, r *http.Request)
@@ -80,6 +82,9 @@ func main() {
 			w.Write([]byte("Hello World v1 " + name))
 		})
 	})
+
+	// static files
+	router.Static("/web", "./static")
 
 	log.Fatal(srv.Start())
 }
