@@ -11,6 +11,7 @@ type Router interface {
 	Endpoint(method, pattern string, handler http.HandlerFunc)
 	Use(middlewares ...func(next http.Handler) http.Handler)
 	Group(pattern string, fn func(r Router))
+	Static(pattern, path string)
 	NotFound(handler http.HandlerFunc)
 	NotAllowed(handler http.HandlerFunc)
 	ServeHTTP(w http.ResponseWriter, r *http.Request)
@@ -81,4 +82,9 @@ func (b *base) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // Param
 func Param(r *http.Request, key string) string {
 	return chi.URLParam(r, key)
+}
+
+// StaticFS
+func (b *base) Static(pattern, path string) {
+	b.router.Handle(pattern, http.StripPrefix(pattern, http.FileServer(http.Dir(path))))
 }
