@@ -9,13 +9,13 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-// Server http server
-type Server struct {
-	mux *chi.Mux
-	srv *http.Server
-}
+type (
+	Server struct {
+		mux *chi.Mux
+		srv *http.Server
+	}
+)
 
-// NewServer
 func NewServer(addr string) *Server {
 	mux := chi.NewRouter()
 
@@ -31,15 +31,16 @@ func NewServer(addr string) *Server {
 	}
 }
 
-// Start server
 func (s *Server) Start() error {
 	log.Println("starting http server on", s.srv.Addr)
 	return s.srv.ListenAndServe()
 }
 
-// Stop server
 func (s *Server) Stop() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	return s.srv.Shutdown(ctx)
+	if err := s.srv.Shutdown(ctx); err != nil && err != http.ErrServerClosed {
+		return err
+	}
+	return nil
 }
